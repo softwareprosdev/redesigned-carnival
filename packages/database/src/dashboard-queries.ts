@@ -91,3 +91,37 @@ export async function getUpcomingTreatments(limit = 5) {
     .orderBy(desc(appointments.appointmentDate))
     .limit(limit);
 }
+
+export async function getAllPatients() {
+  return await db.select().from(patients).orderBy(desc(patients.createdAt));
+}
+
+export async function getPatientById(id: string) {
+  const [patient] = await db
+    .select()
+    .from(patients)
+    .where(eq(patients.id, id))
+    .limit(1);
+  
+  return patient;
+}
+
+export async function getAppointmentsRange(startDate: Date, endDate: Date) {
+  return await db
+    .select({
+      id: appointments.id,
+      patientName: sql<string>`concat(${patients.firstName}, ' ', ${patients.lastName})`,
+      appointmentDate: appointments.appointmentDate,
+      status: appointments.status,
+      reason: appointments.reason,
+    })
+    .from(appointments)
+    .innerJoin(patients, eq(appointments.patientId, patients.id))
+    .where(
+      and(
+        gte(appointments.appointmentDate, startDate),
+        lte(appointments.appointmentDate, endDate)
+      )
+    )
+    .orderBy(appointments.appointmentDate);
+}
