@@ -1,6 +1,7 @@
 "use client";
 
 import { Bell, Search } from "lucide-react";
+import { LanguageSwitcher } from "@dental-prodigy/ui/language-switcher";
 
 export function Header() {
   return (
@@ -16,6 +17,7 @@ export function Header() {
         </div>
       </div>
       <div className="flex items-center gap-4">
+        <LanguageSwitcher />
         <button className="rounded-full p-2 text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800">
           <Bell className="h-5 w-5" />
         </button>

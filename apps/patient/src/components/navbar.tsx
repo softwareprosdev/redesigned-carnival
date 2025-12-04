@@ -7,23 +7,26 @@ import { createSupabaseBrowserClient } from "@dental-prodigy/auth";
 import { useRouter } from "next/navigation";
 import { LogOut, User, Calendar, Home } from "lucide-react";
 import { clsx } from "clsx";
-
-const navigation = [
-  { name: "Overview", href: "/dashboard", icon: Home },
-  { name: "My Appointments", href: "/dashboard/appointments", icon: Calendar },
-  { name: "Profile", href: "/dashboard/profile", icon: User },
-];
+import { useLanguage } from "@dental-prodigy/ui/language-provider";
+import { LanguageSwitcher } from "@dental-prodigy/ui/language-switcher";
 
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createSupabaseBrowserClient();
+  const { t } = useLanguage();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.refresh();
     router.push("/");
   };
+
+  const navigation = [
+    { name: t("nav.overview"), href: "/dashboard", icon: Home },
+    { name: t("nav.appointments"), href: "/dashboard/appointments", icon: Calendar },
+    { name: t("nav.profile"), href: "/dashboard/profile", icon: User },
+  ];
 
   return (
     <nav className="sticky top-0 z-30 border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
@@ -56,14 +59,15 @@ export function Navbar() {
               })}
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
+            <LanguageSwitcher />
             <Button
               appName="patient"
               onClick={handleLogout}
               className="flex items-center gap-2 rounded-full border border-zinc-200 bg-transparent px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
             >
               <LogOut className="h-4 w-4" />
-              Sign out
+              {t("nav.logout")}
             </Button>
           </div>
         </div>

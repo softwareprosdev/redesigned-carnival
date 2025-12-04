@@ -11,18 +11,20 @@ import {
   Activity,
 } from "lucide-react";
 import { clsx } from "clsx";
-
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Patients", href: "/dashboard/patients", icon: Users },
-  { name: "Appointments", href: "/dashboard/appointments", icon: Calendar },
-  { name: "Records", href: "/dashboard/records", icon: FileText },
-  { name: "Analytics", href: "/dashboard/analytics", icon: Activity },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
-];
+import { useLanguage } from "@dental-prodigy/ui/language-provider";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const navigation = [
+    { name: t("sidebar.dashboard"), href: "/dashboard", icon: LayoutDashboard },
+    { name: t("sidebar.patients"), href: "/dashboard/patients", icon: Users },
+    { name: t("sidebar.appointments"), href: "/dashboard/appointments", icon: Calendar },
+    { name: t("sidebar.records"), href: "/dashboard/records", icon: FileText },
+    { name: t("sidebar.analytics"), href: "/dashboard/analytics", icon: Activity },
+    { name: t("sidebar.settings"), href: "/dashboard/settings", icon: Settings },
+  ];
 
   return (
     <div className="flex h-full w-64 flex-col border-r bg-white dark:bg-zinc-900 dark:border-zinc-800">
