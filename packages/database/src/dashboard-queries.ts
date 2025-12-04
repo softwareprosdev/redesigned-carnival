@@ -125,3 +125,28 @@ export async function getAppointmentsRange(startDate: Date, endDate: Date) {
     )
     .orderBy(appointments.appointmentDate);
 }
+
+export async function getPatientByUserId(userId: string) {
+  const [patient] = await db
+    .select()
+    .from(patients)
+    .where(eq(patients.userId, userId))
+    .limit(1);
+  return patient;
+}
+
+export async function getPatientAppointments(patientId: string) {
+  return await db
+    .select({
+      id: appointments.id,
+      appointmentDate: appointments.appointmentDate,
+      status: appointments.status,
+      reason: appointments.reason,
+      dentistName: users.fullName,
+      notes: appointments.notes,
+    })
+    .from(appointments)
+    .leftJoin(users, eq(appointments.dentistId, users.id))
+    .where(eq(appointments.patientId, patientId))
+    .orderBy(desc(appointments.appointmentDate));
+}
